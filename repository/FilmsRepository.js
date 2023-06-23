@@ -63,7 +63,7 @@ class FilmsRepository {
             this.database.run(
                 'INSERT INTO films (name, synopsis, release_year, genre_id) VALUES (?, ?, ?, ?)',
                 [name, synopsis, release_year, genre_id],
-                function (err) {
+                (err) => {
                     if (err) {
                         console.error(err.message);
                         reject(err);
@@ -111,7 +111,7 @@ class FilmsRepository {
             this.database.run(
                 'DELETE FROM films WHERE id = ?',
                 [id],
-                function (err) {
+                (err) => {
                     if (err) {
                         console.error(err.message);
                         reject(err);
