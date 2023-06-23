@@ -19,6 +19,19 @@ class GenresRepository {
         });
     }
 
+    get(id) {
+        return new Promise((resolve, reject) => {
+            this.database.get('SELECT * FROM genres WHERE id = ?', [id], (err, row) => {
+                if (err) {
+                    console.error(err.message);
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
     create(genreData) {
         const {
             name,
