@@ -32,6 +32,20 @@ class ActorsRepository {
         });
     }
 
+    getActors(ids) {
+        return new Promise((resolve, reject) => {
+            const placeholders = ids.map(() => '?').join(',');
+            this.database.get(`SELECT COUNT(*) AS count FROM actors WHERE id IN (${placeholders})`, ids, (err, row) => {
+                if (err) {
+                    console.error(err.message);
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
     create(actorData) {
         const {
             first_name,

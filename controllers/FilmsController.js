@@ -43,7 +43,7 @@ exports.createFilm = (req, res) => {
 
     Promise.all([
         repoFilms.create(req.body),
-        repoActors.get(actors_ids),
+        repoActors.getActors(actors_ids),
         repoGenres.get(genre_id),
     ])
         .then(([filmId, actors, genre]) => {
@@ -72,7 +72,7 @@ exports.updateFilm = (req, res) => {
 
     Promise.all([
         repoFilms.update(filmId, req.body),
-        repoActors.get(actorIds),
+        repoActors.getActors(actorIds),
         repoGenres.get(genreId),
     ])
         .then(([, actors, genre]) => {
