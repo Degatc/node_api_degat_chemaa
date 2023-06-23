@@ -124,14 +124,16 @@ class FilmsRepository {
     }
 
     addActorsToFilm(film_id, actor_ids) {
-        actor_ids.map((actorId) => {
+        const insertAssociationsQuery = 'INSERT INTO films_actors (film_id, actor_id) VALUES (?, ?)';
+        const insertPromises = actor_ids.map((actorId) => {
             const associationsParams = [film_id, actorId];
             return new Promise((resolve, reject) => {
-                this.database.run('INSERT INTO films_actors (film_id, actor_id) VALUES (?, ?)', associationsParams, (err) => {
+                this.database.run(insertAssociationsQuery, associationsParams, (err) => {
                     if (err) {
                         console.error(err.message);
                         reject(err);
                     } else {
+                        Promise.all(insertPromises);
                         resolve();
                     }
                 });
