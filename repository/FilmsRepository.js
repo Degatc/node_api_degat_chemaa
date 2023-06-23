@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
 /* eslint-disable func-names */
+
 class FilmsRepository {
     constructor(database) {
         this.database = database;
