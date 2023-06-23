@@ -124,20 +124,30 @@ class FilmsRepository {
     }
 
     addActorsToFilm(film_id, actor_ids) {
-        const insertAssociationsQuery = 'INSERT INTO films_actors (film_id, actor_id) VALUES (?, ?)';
-        const insertPromises = actor_ids.map((actorId) => {
-            const associationsParams = [film_id, actorId];
-            return new Promise((resolve, reject) => {
-                this.database.run(insertAssociationsQuery, associationsParams, (err) => {
-                    if (err) {
-                        console.error(err.message);
-                        reject(err);
-                    } else {
-                        Promise.all(insertPromises);
-                        resolve();
-                    }
-                });
+        return new Promise((resolve, reject) => {
+            const promises = [];
+            actor_ids.forEach((actor_id) => {
+                promises.push(
+                    new Promise((resolved, rejected) => {
+                        this.database.run(
+                            'INSERT INTO film_actors (film_id, actor_id) VALUES (?, ?)',
+                            [film_id, actor_id],
+                            (err) => {
+                                if (err) {
+                                    console.error(err.message);
+                                    rejected(err);
+                                } else {
+                                    resolved();
+                                }
+                            },
+                        );
+                    }),
+                );
             });
+
+            Promise.all(promises)
+                .then(() => resolve())
+                .catch((err) => reject(err));
         });
     }
 

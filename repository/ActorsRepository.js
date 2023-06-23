@@ -34,8 +34,11 @@ class ActorsRepository {
 
     getActors(ids) {
         return new Promise((resolve, reject) => {
-            const placeholders = ids.map(() => '?').join(',');
-            this.database.get(`SELECT COUNT(*) AS count FROM actors WHERE id IN (${placeholders})`, ids, (err, row) => {
+            const placeholders = [];
+            ids.forEach(() => placeholders.push('?'));
+            const placeholdersString = placeholders.join(',');
+
+            this.database.get(`SELECT COUNT(*) AS count FROM actors WHERE id IN (${placeholdersString})`, ids, (err, row) => {
                 if (err) {
                     console.error(err.message);
                     reject(err);
