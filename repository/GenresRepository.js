@@ -73,7 +73,7 @@ class GenresRepository {
     checkGenreUsage(id) {
         return new Promise((resolve, reject) => {
             this.database.get(
-                'SELECT COUNT(*) as count FROM films WHERE genreId = ?',
+                'SELECT COUNT(*) as count FROM films WHERE genre_id = ?',
                 [id],
                 (err, row) => {
                     if (err) {
