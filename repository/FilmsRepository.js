@@ -124,29 +124,18 @@ class FilmsRepository {
     }
 
     addActorsToFilm(film_id, actor_ids) {
-        return new Promise((resolve, reject) => {
-            if (!actor_ids || actor_ids.length === 0) {
-                resolve();
-            } else {
-                const placeholders = actor_ids.map(() => '(?, ?)').join(', ');
-                const params = [];
-                actor_ids.forEach((actor_id) => {
-                    params.push(film_id, actor_id);
+        actor_ids.map((actorId) => {
+            const associationsParams = [film_id, actorId];
+            return new Promise((resolve, reject) => {
+                this.database.run('INSERT INTO films_actors (film_id, actor_id) VALUES (?, ?)', associationsParams, (err) => {
+                    if (err) {
+                        console.error(err.message);
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
                 });
-
-                this.database.run(
-                    `INSERT INTO films_actors (film_id, actor_id) VALUES ${placeholders}`,
-                    params,
-                    (err) => {
-                        if (err) {
-                            console.error(err.message);
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    },
-                );
-            }
+            });
         });
     }
 
