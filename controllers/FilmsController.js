@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const db = require('../database');
 const FilmsRepository = require('../repository/FilmsRepository');
 const ActorsRepository = require('../repository/ActorsRepository');
@@ -36,20 +37,20 @@ exports.createFilm = (req, res) => {
     const repoActors = new ActorsRepository(db);
     const repoGenres = new GenresRepository(db);
     const {
-        genreId,
-        actorIds,
+        genre_id,
+        actors_ids,
     } = req.body;
 
     Promise.all([
         repoFilms.create(req.body),
-        repoActors.get(actorIds),
-        repoGenres.get(genreId),
+        repoActors.get(actors_ids),
+        repoGenres.get(genre_id),
     ])
         .then(([filmId, actors, genre]) => {
             if (!genre) {
                 throw new Error('Genre not found');
             }
-            if (actorIds.length !== actors.length) {
+            if (actors_ids.length !== actors.length) {
                 throw new Error('One or more actors not found');
             }
             res.status(201).json({ success: true, message: 'Film created', filmId });

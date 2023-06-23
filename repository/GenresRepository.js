@@ -21,7 +21,7 @@ class GenresRepository {
 
     get(id) {
         return new Promise((resolve, reject) => {
-            this.database.get('SELECT * FROM genres WHERE id = ?', [id], (err, row) => {
+            this.database.get('SELECT COUNT(*) AS count FROM genres WHERE id = ?', [id], (err, row) => {
                 if (err) {
                     console.error(err.message);
                     reject(err);
