@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const db = require('../database');
 const GenresRepository = require('../repository/GenresRepository');
 
@@ -30,19 +31,19 @@ exports.createGenre = (req, res) => {
 
 exports.deleteGenre = (req, res) => {
     const repo = new GenresRepository(db);
-    const genreId = req.params.id;
+    const { id } = req.params;
 
     repo
-        .checkGenreUsage(genreId)
+        .checkGenreUsage(id)
         .then((isUsed) => {
             if (isUsed) {
                 res.status(400).json({ error: 'Genre is used in one or more films and cannot be deleted' });
             } else {
                 repo
-                    .delete(genreId)
+                    .delete(id)
                     .then((success) => {
                         if (success) {
-                            res.json({ success: true, message: 'Genre deleted', genreId });
+                            res.json({ success: true, message: 'Genre deleted', id });
                         } else {
                             res.status(404).json({ error: 'Genre not found' });
                         }
